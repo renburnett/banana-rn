@@ -2,28 +2,22 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
 export default async imageSource => {
-	const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-	if (status !== 'granted') {
-		console.log('No camera roll permissions');
-	}
+	const pickImage = async permissions => {
+		const { status } = await Permissions.askAsync(permissions);
 
-	const pickGalleryImage = await ImagePicker.launchImageLibraryAsync({
-		mediaTypes: ImagePicker.MediaTypeOptions.All, // ?? TODO: restrict only to images
-		allowsEditing: true,
-		aspect: [ 16, 9 ],
-		quality: 1,
-	});
+		if (status !== 'granted') {
+			console.log('No camera roll permissions');
+		}
 
-	const pickCameraImage = await ImagePicker.launchCameraAsync({
-		mediaTypes: ImagePicker.MediaTypeOptions.Images,
-		allowsEditing: true,
-		aspect: [ 16, 9 ],
-		quality: 1,
-	});
+		return ImagePicker.launchCameraAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.Images, // ?? TODO: Assuming we never want video media types
+			allowsEditing: true,
+			aspect: [ 16, 9 ],
+			quality: 1,
+		});
+	};
 
-
-	const pickImage = () => (imageSource === 'gallery' ? pickGalleryImage : pickCameraImage);
-	const pickedImage = await pickImage();
+	const pickedImage = await pickImage(imageSource === 'gallery' ? Permissions.CAMERA_ROLL : Permissions.CAMERA);
 
 	return pickedImage.cancelled ? null : pickedImage;
 };

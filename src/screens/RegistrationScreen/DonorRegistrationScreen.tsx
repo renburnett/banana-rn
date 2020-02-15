@@ -23,6 +23,7 @@ import * as colors from '@util/colors';
 import pickImage from '@util/imagePicker';
 import styles from './RegistrationScreen.styles';
 
+
 export default () => {
 	const { navigate } = useNavigation();
 	const [ _state, actions ] = useGlobal() as any;

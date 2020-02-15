@@ -12,6 +12,7 @@ import { Checkbox } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 import useGlobal from '@state';
 import * as colors from '@util/colors';
+import pickImage from '@util/imagePicker';
 import {
 	Title,
 	LinkButton,
@@ -80,6 +81,7 @@ export default () => {
 	const [ transportationMethod, setTransportationMethod ] = useState();
 	const [ gender, setGender ] = useState();
 	const [ ethnicity, setEthnicity ] = useState();
+	const [ incomeImage, setIncomeImage ] = useState();
 	const [ termsOfService, setTermsOfService ] = useState(false);
 
 	const toggleTermsOfService = () => {
@@ -93,6 +95,7 @@ export default () => {
 		if (!city) { Alert.alert('Please enter your city.'); return; }
 		if (zip.toString().length !== 5) { Alert.alert('Please enter your 5-digit zip code.'); return; }
 		if (!transportationMethod) { Alert.alert('Please select your preferred method of transportation.'); return; }
+		if (!incomeImage) { Alert.alert('Please add an image to verify your income to continue.'); return; }
 		if (!termsOfService) { Alert.alert('Please read and accept the terms of service to complete your registration.'); return; }
 
 		const statusCode = await register({
@@ -244,6 +247,33 @@ export default () => {
 							Icon={() => <ChevronDown />}
 							items={itemizeList(transportationMethods)}
 						/>
+					</View>
+				</View>
+
+				<View>
+					<InputLabel text="Income Verification" />
+					<View style={styles.row}>
+						<View style={{ flex: 4 }}>
+							<TextInput
+								value={incomeImage?.uri}
+								style={styles.input}
+								autoCapitalize="none"
+							/>
+						</View>
+						<View style={styles.iconContainer}>
+							<TouchableWithoutFeedback
+								onPress={() => pickImage('gallery')}
+							>
+								<Icon name="image" style={styles.icon} />
+							</TouchableWithoutFeedback>
+
+							<TouchableWithoutFeedback
+								onPress={() => pickImage('camera')}
+							>
+								<Icon name="camera" style={styles.icon} />
+							</TouchableWithoutFeedback>
+
+						</View>
 					</View>
 				</View>
 
