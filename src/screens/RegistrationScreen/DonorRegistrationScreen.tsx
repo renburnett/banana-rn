@@ -8,8 +8,6 @@ import {
 	View,
 } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
 import { Checkbox } from 'react-native-paper';
 import {
 	FormTextInput,
@@ -22,6 +20,7 @@ import {
 } from '@elements';
 import useGlobal from '@state';
 import * as colors from '@util/colors';
+import * as pickImage from '@util/imagePicker';
 import styles from './RegistrationScreen.styles';
 
 export default () => {
@@ -64,20 +63,6 @@ export default () => {
 		}
 	};
 
-	// TODO: add take picture functionality, abstract this out to a util or state.  See https://docs.expo.io/versions/latest/sdk/imagepicker/#imagepickerlaunchcameraasyncoptions
-	const pickImage = async () => {
-		const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-		if (status !== 'granted') {
-			Alert.alert('No camera roll permissions');
-		}
-		const pickedImage = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.All,
-			allowsEditing: true,
-			aspect: [ 16, 9 ],
-			quality: 1,
-		});
-		pickedImage.cancelled === false && setImage(pickedImage);
-	};
 
 	return (
 		<ScrollView contentContainerStyle={styles.outerContainer}>
