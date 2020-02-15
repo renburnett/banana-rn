@@ -20,7 +20,7 @@ import {
 } from '@elements';
 import useGlobal from '@state';
 import * as colors from '@util/colors';
-import * as pickImage from '@util/imagePicker';
+import pickImage from '@util/imagePicker';
 import styles from './RegistrationScreen.styles';
 
 export default () => {
@@ -108,10 +108,17 @@ export default () => {
 						</View>
 						<View style={styles.iconContainer}>
 							<TouchableWithoutFeedback
-								onPress={pickImage}
+								onPress={() => pickImage('gallery')}
 							>
 								<Icon name="image" style={styles.icon} />
 							</TouchableWithoutFeedback>
+
+							<TouchableWithoutFeedback
+								onPress={() => pickImage('camera')}
+							>
+								<Icon name="camera" style={styles.icon} />
+							</TouchableWithoutFeedback>
+
 						</View>
 					</View>
 				</View>
@@ -134,7 +141,7 @@ export default () => {
 					<FormTextInput
 						text="State"
 						value={state}
-						setValue={() => {}}
+						setValue={() => { }}
 						width="15%"
 						autoCapitalize="words"
 					/>
