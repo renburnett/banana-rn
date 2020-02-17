@@ -4,20 +4,20 @@ import {
 	Alert,
 	ScrollView,
 	Text,
-	TextInput,
 	View,
 } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { TouchableWithoutFeedback, TextInput } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { Checkbox } from 'react-native-paper';
 import {
+	FormImageInput,
 	FormTextInput,
-	InputLabel,
 	Header,
 	LinkButton,
 	SpacerInline,
 	Title,
+	InputLabel,
 	Icon,
 } from '@elements';
 import useGlobal from '@state';
@@ -29,6 +29,7 @@ export default () => {
 	const [ _state, actions ] = useGlobal() as any;
 	const { register } = actions;
 
+
 	const [ city, setCity ] = useState('');
 	const [ email, setEmail ] = useState('');
 	const [ image, setImage ] = useState({} as ImagePicker.ImagePickerResult);
@@ -36,7 +37,7 @@ export default () => {
 	const [ organizationName, setOrganizationName ] = useState('');
 	const [ password, setPassword ] = useState('');
 	const [ street, setStreet ] = useState('');
-	const [ state, _setState ] = useState('WA');
+	const [ state, setState ] = useState('WA');
 	const [ termsOfService, setTermsOfService ] = useState(false);
 	const [ zip, setZip ] = useState('');
 
@@ -149,7 +150,7 @@ export default () => {
 					<FormTextInput
 						text="State"
 						value={state}
-						setValue={() => {}}
+						setValue={setState}
 						width="15%"
 						autoCapitalize="words"
 					/>

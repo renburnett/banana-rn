@@ -15,6 +15,7 @@ import * as colors from '@util/colors';
 import {
 	Title,
 	LinkButton,
+	FormImageInput,
 	FormTextInput,
 	SpacerInline,
 	Header,

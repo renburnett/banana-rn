@@ -4,8 +4,10 @@ import { Provider } from 'react-native-paper';
 import Constants from 'expo-constants';
 import * as Font from 'expo-font';
 import NavigationService from '@util/NavigationService';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import Route from './src/routes/Route';
 import styles from './App.styles';
+
 
 YellowBox.ignoreWarnings([
 	'Warning: componentWillReceiveProps has been renamed',
@@ -40,10 +42,12 @@ export default function App() {
 	}
 
 	return fontsLoaded && (
-		<Provider>
-			<View style={styles.container}>
-				<Route ref={navRef => NavigationService.setTopLevelNavigator(navRef)} />
-			</View>
-		</Provider>
+		<ActionSheetProvider>
+			<Provider>
+				<View style={styles.container}>
+					<Route ref={navRef => NavigationService.setTopLevelNavigator(navRef)} />
+				</View>
+			</Provider>
+		</ActionSheetProvider>
 	);
 }
