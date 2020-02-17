@@ -4,23 +4,19 @@ import {
 	Alert,
 	ScrollView,
 	Text,
-	TextInput,
 	View,
 } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Checkbox } from 'react-native-paper';
 import {
+	FormImageInput,
 	FormTextInput,
-	InputLabel,
 	Header,
 	LinkButton,
 	SpacerInline,
 	Title,
-	Icon,
 } from '@elements';
 import useGlobal from '@state';
 import * as colors from '@util/colors';
-import pickImage from '@util/imagePicker';
 import styles from './RegistrationScreen.styles';
 
 
@@ -28,6 +24,7 @@ export default () => {
 	const { navigate } = useNavigation();
 	const [ _state, actions ] = useGlobal() as any;
 	const { register } = actions;
+
 
 	const [ city, setCity ] = useState('');
 	const [ email, setEmail ] = useState('');
@@ -97,32 +94,11 @@ export default () => {
 					setValue={setLicense}
 				/>
 
-				<View>
-					<InputLabel text="Business License Verification" />
-					<View style={styles.row}>
-						<View style={{ flex: 4 }}>
-							<TextInput
-								value={image?.uri}
-								style={styles.input}
-								autoCapitalize="none"
-							/>
-						</View>
-						<View style={styles.iconContainer}>
-							<TouchableWithoutFeedback
-								onPress={() => pickImage('gallery')}
-							>
-								<Icon name="image" style={styles.icon} />
-							</TouchableWithoutFeedback>
-
-							<TouchableWithoutFeedback
-								onPress={() => pickImage('camera')}
-							>
-								<Icon name="camera" style={styles.icon} />
-							</TouchableWithoutFeedback>
-
-						</View>
-					</View>
-				</View>
+				<FormImageInput
+					text="Business License Verification"
+					image={image}
+					setImage={setImage}
+				/>
 
 				<FormTextInput
 					text="Street Address"

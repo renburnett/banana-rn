@@ -12,10 +12,10 @@ import { Checkbox } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 import useGlobal from '@state';
 import * as colors from '@util/colors';
-import pickImage from '@util/imagePicker';
 import {
 	Title,
 	LinkButton,
+	FormImageInput,
 	FormTextInput,
 	SpacerInline,
 	Header,
@@ -250,32 +250,11 @@ export default () => {
 					</View>
 				</View>
 
-				<View>
-					<InputLabel text="Income Verification" />
-					<View style={styles.row}>
-						<View style={{ flex: 4 }}>
-							<TextInput
-								value={incomeImage?.uri}
-								style={styles.input}
-								autoCapitalize="none"
-							/>
-						</View>
-						<View style={styles.iconContainer}>
-							<TouchableWithoutFeedback
-								onPress={() => pickImage('gallery')}
-							>
-								<Icon name="image" style={styles.icon} />
-							</TouchableWithoutFeedback>
-
-							<TouchableWithoutFeedback
-								onPress={() => pickImage('camera')}
-							>
-								<Icon name="camera" style={styles.icon} />
-							</TouchableWithoutFeedback>
-
-						</View>
-					</View>
-				</View>
+				<FormImageInput
+					text="Income Verification"
+					image={incomeImage}
+					setImage={setIncomeImage}
+				/>
 
 				<SpacerInline height={10} />
 				<View style={styles.checkboxRow}>
