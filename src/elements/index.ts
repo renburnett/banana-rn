@@ -1,3 +1,4 @@
+export { FormImageInput } from './FormImageInput';
 export { FormTextInput } from './FormTextInput';
 export { Header } from './Header';
 export { Icon } from './Icon';
