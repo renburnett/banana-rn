@@ -42,7 +42,7 @@ const IMAGE_OPTIONS: ImagePicker.ImagePickerOptions = {
  * @param imageSource - The method of sourcing the image.
  * @returns The user-selected image result, if successful.
  */
-export async function getImage(imageSource: ImageSourcingMethod): Promise<ImagePicker.ImagePickerResult | null> {
+export async function sourceImage(imageSource: ImageSourcingMethod): Promise<ImagePicker.ImagePickerResult | null> {
 	let pickedImage = {} as ImagePicker.ImagePickerResult; // The user selected image.
 
 	/**

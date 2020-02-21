@@ -11,14 +11,14 @@ import {
 	InputLabel,
 	Icon,
 } from '@elements';
-import * as ImagePicker from '@util/ImagePicker';
+import * as ImageSourcer from '@util/ImageSourcer';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import styles from './FormImageInput.styles';
 
 interface FormTextInputProps {
 	text: string;
 	image: any;
-	setImage: any;
+	setImage: Function;
 	width?: number | string;
 	autoCapitalize?: 'words' | 'sentences' | 'none' | 'characters';
 	inline?: boolean;
@@ -44,7 +44,7 @@ export default ({
 	 * Shows the image source action sheet and sets the image to the image selected
 	 * by the user.
 	 */
-	const handleImagePickerPress = () => showActionSheetWithOptions({
+	const handleImageInputPress = () => showActionSheetWithOptions({
 		options: [ 'Choose from library', 'Take image with camera', 'Cancel' ],
 		cancelButtonIndex: 2,
 		destructiveButtonIndex: -1,
@@ -54,10 +54,10 @@ export default ({
 
 		switch (buttonIndex) {
 			case 0:
-				imageSource = ImagePicker.LOCAL_STORAGE;
+				imageSource = ImageSourcer.LOCAL_STORAGE;
 				break;
 			case 1:
-				imageSource = ImagePicker.CAMERA;
+				imageSource = ImageSourcer.CAMERA;
 				break;
 			case 2:
 				console.log('Image input canceled');
@@ -66,7 +66,7 @@ export default ({
 				break;
 		}
 
-		setImage(await ImagePicker.getImage(imageSource));
+		setImage(await ImageSourcer.sourceImage(imageSource));
 	});
 
 	return (
@@ -93,7 +93,7 @@ export default ({
 				</View>
 
 				<TouchableWithoutFeedback
-					onPress={handleImagePickerPress}
+					onPress={handleImageInputPress}
 				>
 					<Icon name="image" style={styles.icon} />
 				</TouchableWithoutFeedback>
