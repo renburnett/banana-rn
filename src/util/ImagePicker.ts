@@ -1,20 +1,22 @@
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
-export type ImageSourceType = 'camera' | 'localStorage';
+export type ImageSourcingMethod = 'camera' | 'localStorage';
 export const CAMERA = 'camera';
 export const LOCAL_STORAGE = 'localStorage';
 
+// TODO: rename file to ImageSourcer ? for clarity, should it be different than expo-image-picker
 
-interface ImageSourceConfig {
+// Configuration for an image sourcing method.
+interface ImageSourcingConfig {
 	permissions: Array<Permissions.PermissionType>; // Device permissions required for an image source.
 	launchImageSourcingMethod: Function; // Native launcher for the image source.
 }
 
-// All of the possible methods of retreiving an image from the device..
-const IMAGE_SOURCE_METHODS: {[key in ImageSourceType]: ImageSourceConfig} = {
+// The possible methods of retreiving an image from the device mapped to their unique configs.
+const IMAGE_SOURCE_METHODS: {[key in ImageSourcingMethod]: ImageSourcingConfig} = {
 	camera: {
-		// ?? If request for camera roll is too annoying, only request on required devices
+		// ?? TODO: If request for camera roll is too annoying, only request on required devices (iOS 10 & Android).
 		permissions: [ Permissions.CAMERA, Permissions.CAMERA_ROLL ],
 		launchImageSourcingMethod: ImagePicker.launchCameraAsync,
 	},
@@ -24,7 +26,7 @@ const IMAGE_SOURCE_METHODS: {[key in ImageSourceType]: ImageSourceConfig} = {
 	},
 };
 
-// Generic options for images, no matter the image source
+// Generic options for images, no matter the image source.
 const IMAGE_OPTIONS: ImagePicker.ImagePickerOptions = {
 	mediaTypes: ImagePicker.MediaTypeOptions.Images,
 	allowsEditing: true,
@@ -32,18 +34,27 @@ const IMAGE_OPTIONS: ImagePicker.ImagePickerOptions = {
 	quality: 1,
 };
 
-export async function getImage(imageSource: ImageSourceType): Promise<ImagePicker.ImagePickerResult | null> {
+/**
+ * Launches the image sourcing method dependent on the given image source type.
+ * If the user doesn't grant device permissions or the device fails to retrieve an image,
+ * something will happen. :)
+ *
+ * @param imageSource - The method of sourcing the image.
+ * @returns The user-selected image result, if successful.
+ */
+export async function getImage(imageSource: ImageSourcingMethod): Promise<ImagePicker.ImagePickerResult | null> {
 	let pickedImage = {} as ImagePicker.ImagePickerResult; // The user selected image.
 
 	/**
 	 * Requests device access permissions from the user and launches the method of image acquisition.
-	 * @param {ImageSourceConfig} {} Configuration for a specific method of image acquisition.
+	 *
+	 * @param {ImageSourcingConfig} Configuration for a specific method of image acquisition.
 	 * @throws When access permission is denied or when an error occurs during the request.
 	 */
 	const getImageFromSource = async ({
 		permissions,
 		launchImageSourcingMethod,
-	}: ImageSourceConfig): Promise<ImagePicker.ImagePickerResult> => {
+	}: ImageSourcingConfig): Promise<ImagePicker.ImagePickerResult> => {
 		const permissionResponses = await Permissions.askAsync(...permissions);
 
 		// Any unsuccessful permissions status will propogate to this 'status' property.
@@ -58,6 +69,7 @@ export async function getImage(imageSource: ImageSourceType): Promise<ImagePicke
 	try {
 		pickedImage = await getImageFromSource(IMAGE_SOURCE_METHODS[imageSource]);
 	} catch (err) {
+		console.log(err.msg);
 		// TODO: display alert with error message
 	}
 
