@@ -26,35 +26,42 @@ export default () => {
 	const { register } = actions;
 
 
-	const [ city, setCity ] = useState('');
+	const [ editing, setEditing ] = useState(false);
+
+	// TODO: initialize states to the actual profile
 	const [ email, setEmail ] = useState('');
-	const [ image, setImage ] = useState();
-	const [ license, setLicense ] = useState('');
+	const [ city, setCity ] = useState('');
+	const [ licenseVerificationImage, setLicenseVerificationmage ] = useState();
+	const [ licenseNumber, setLicenseNumber ] = useState('');
 	const [ organizationName, setOrganizationName ] = useState('');
-	const [ password, setPassword ] = useState('');
+	const [ newPassword, setNewPassword ] = useState('');
+	const [ newPasswordConfirmation, setNewPasswordConfirmation ] = useState('');
 	const [ street, setStreet ] = useState('');
-	const [ state, _setState ] = useState('WA');
-	const [ termsOfService, setTermsOfService ] = useState(false);
+	const [ state, setState ] = useState('WA');
 	const [ zip, setZip ] = useState();
 
-	const toggleTermsOfService = () => setTermsOfService(!termsOfService);
-
+	// TODO: only validate entries that have changed
 	const validateAndSubmit = async () => {
+		// TODO: redundant with alerts in registration screen
 		if (organizationName === '') { Alert.alert("Please add your organization's name."); return; }
 		if (!email.includes('@') || !email.includes('.')) { Alert.alert('Please enter a valid email address.'); return; }
-		if (password.length < 8) { Alert.alert('Please enter a password at least 8 characters long.'); return; }
-		if (license.length !== 9) { Alert.alert('Please enter your 9-digit UBI with no spaces or dashes.'); return; }
-		if (!image) { Alert.alert('Please add an image of your business license to continue.'); return; }
+		if (newPassword !== '') {
+			if (newPassword.length < 8) { Alert.alert('Please enter a password of at least 8 characters long.'); return; }
+			if (newPassword !== newPasswordConfirmation) { Alert.alert('The two passwords do not match.'); return; }
+		}
+		if (licenseNumber.length !== 9) { Alert.alert('Please enter your 9-digit UBI with no spaces or dashes.'); return; }
+		if (!licenseVerificationImage) { Alert.alert('Please add an image of your business license to continue.'); return; }
 		if (!street || street.split(' ').length < 3) { Alert.alert('Please enter your street number and name.'); return; }
 		if (!city) { Alert.alert('Please enter your city.'); return; }
 		if (zip.toString().length !== 5) { Alert.alert('Please enter your 5-digit zip code.'); return; }
-		if (!termsOfService) { Alert.alert('Please read and accept the terms of service to complete your registration.'); return; }
 
+		// TODO: create updateRegister action to global state
+		// TODO: Only provide the inputs that have changed
 		const statusCode = await register({
-			organizationName, email, password, license, street, city, state, zip, termsOfService,
+			organizationName, email, newPassword, licenseNumber, street, city, state, zip,
 		});
 		switch (statusCode) {
-			case (201 || 202): Alert.alert('Registration complete! Please log in to continue.'); navigate('LoginScreen', { email, password }); return;
+			case (201 || 202): Alert.alert('Profile updated!.'); setEditing(false); return;
 			case 406: Alert.alert('Error: not accepted'); return;
 			case 500: Alert.alert('Internal server error, please try again later.'); return;
 			default: Alert.alert("Sorry, that didn't work, please try again later."); console.log(statusCode);
@@ -65,46 +72,43 @@ export default () => {
 	return (
 		<ScrollView contentContainerStyle={styles.outerContainer}>
 			<View>
-				<Header showMenu={false} />
-				<Title text="Registration." />
-				<Text style={styles.text}>
-					Please add your business's details below.  You will be able to update them once registration is complete.
-				</Text>
-				<FormTextInput
-					text="Organization Name"
-					value={organizationName}
-					setValue={setOrganizationName}
-				/>
+				{/* TODO: Change header height */}
+				<Header showBackButton={false} />
+				{/* <ProfileImage image={image} /> */}
 
 				<FormTextInput
-					text="Email Address"
+					text="Email"
 					value={email}
 					setValue={setEmail}
+					disabled={!editing}
 				/>
 
 				<FormTextInput
-					text="Password"
-					value={password}
-					setValue={setPassword}
-				/>
-
-				<FormTextInput
-					text="WA State UBI (Business License No.)"
-					value={license}
-					setValue={setLicense}
+					text="Business Name"
+					value={organizationName}
+					setValue={setOrganizationName}
+					disabled={!editing}
 				/>
 
 				<FormImageInput
 					text="Business License Verification"
-					image={image}
-					setImage={setImage}
+					image={licenseVerificationImage}
+					setImage={setLicenseVerificationmage}
+					editable={editing}
 				/>
 
 				<FormTextInput
-					text="Street Address"
+					text="Business License Number"
+					value={licenseNumber}
+					setValue={setLicenseNumber}
+					disabled={!editing}
+				/>
+
+				<FormTextInput
+					text="Business Address"
 					value={street}
 					setValue={setStreet}
-					autoCapitalize="words"
+					disabled={!editing}
 				/>
 
 				<View style={styles.row}>
@@ -114,13 +118,15 @@ export default () => {
 						setValue={setCity}
 						width="40%"
 						autoCapitalize="words"
+						disabled={true}
 					/>
 					<FormTextInput
 						text="State"
 						value={state}
-						setValue={() => { }}
+						setValue={setState}
 						width="15%"
 						autoCapitalize="words"
+						disabled={true}
 					/>
 					<FormTextInput
 						text="Zip"
@@ -128,41 +134,39 @@ export default () => {
 						setValue={setZip}
 						width="35%"
 						autoCapitalize="words"
+						disabled={true}
 					/>
 				</View>
 
-				<View style={styles.checkboxRow}>
-					<View style={styles.checkBox}>
-						<Checkbox
-							status={termsOfService ? 'checked' : 'unchecked'}
-							onPress={toggleTermsOfService}
-							color={colors.NAVY_BLUE}
-							uncheckedColor="white"
+				{/* TODO: current password should not be available, especially as plain text */}
+				{/* < FormTextInput
+					text="Current Password"
+					value={currentPassword}
+					setValue={setCurrentPassword}
+				/> */}
+				{editing ? (
+					<View>
+						<FormTextInput
+							text="New Password"
+							value={newPassword}
+							setValue={setNewPassword}
+						/>
+
+						<FormTextInput
+							text="Re-enter New Password"
+							value={newPasswordConfirmation}
+							setValue={setNewPasswordConfirmation}
 						/>
 					</View>
-					<SpacerInline width={10} />
-					<Text
-						style={styles.text}
-						onPress={toggleTermsOfService}
-					>
-						Accept
-					</Text>
-					<SpacerInline width={10} />
-					<View style={{ top: 11 }}>
-						<LinkButton
-							text="Terms of Service"
-							destination="TermsScreen"
-						/>
-					</View>
-				</View>
+				) : null}
 			</View>
 
-
 			<View>
+				{/* Component? used in both registration screen and profile screen */}
 				<SpacerInline height={15} />
 				<LinkButton
-					text="Register"
-					onPress={validateAndSubmit}
+					text={editing ? 'Save' : 'Edit'}
+					onPress={editing ? validateAndSubmit : () => setEditing(true)}
 				/>
 				<SpacerInline height={40} />
 			</View>
