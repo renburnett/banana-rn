@@ -9,6 +9,7 @@ interface DonorRegisterProps {
 	city: string;
 	state: string;
 	zip: number;
+	licenseVerificationImage: any;
 }
 
 interface ClientRegisterProps {
@@ -21,12 +22,13 @@ interface ClientRegisterProps {
 	transportationMethod: string;
 	ethnicity: string;
 	gender: string;
+	incomeVerificationImage: any;
 }
 
 export const registerDonor = async (store, donor: DonorRegisterProps) => {
 	const { createUrl, userIdentity } = store.state;
 	const {
-		organizationName, email, password, license, street, city, state, zip,
+		organizationName, email, password, license, street, city, state, zip, licenseVerificationImage,
 	} = donor;
 	try {
 		const response = await railsAxios().post(createUrl, JSON.stringify({
@@ -40,6 +42,7 @@ export const registerDonor = async (store, donor: DonorRegisterProps) => {
 				address_zip: zip,
 				address_state: state,
 				account_status: 'pending',
+				license_verification_image: licenseVerificationImage
 			},
 		}));
 
@@ -60,7 +63,7 @@ export const registerDonor = async (store, donor: DonorRegisterProps) => {
 export const registerClient = async (store, client: ClientRegisterProps) => {
 	const { createUrl, userIdentity } = store.state;
 	const {
-		email, password, street, city, state, zip, transportationMethod, ethnicity, gender,
+		email, password, street, city, state, zip, transportationMethod, ethnicity, gender, incomeVerificationImage
 	} = client;
 	try {
 		const response = await railsAxios().post(createUrl, JSON.stringify({
@@ -75,6 +78,7 @@ export const registerClient = async (store, client: ClientRegisterProps) => {
 				ethnicity,
 				gender,
 				account_status: 'pending',
+				income_verification_image: incomeVerificationImage
 			},
 		}));
 		await store.setState({

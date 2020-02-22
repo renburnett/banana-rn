@@ -28,7 +28,7 @@ export default () => {
 
 	const [ city, setCity ] = useState('');
 	const [ email, setEmail ] = useState('');
-	const [ image, setImage ] = useState();
+	const [ licenseVerificationImage, setLicenseVerificationImage ] = useState();
 	const [ license, setLicense ] = useState('');
 	const [ organizationName, setOrganizationName ] = useState('');
 	const [ password, setPassword ] = useState('');
@@ -44,14 +44,14 @@ export default () => {
 		if (!email.includes('@') || !email.includes('.')) { Alert.alert('Please enter a valid email address.'); return; }
 		if (password.length < 8) { Alert.alert('Please enter a password at least 8 characters long.'); return; }
 		if (license.length !== 9) { Alert.alert('Please enter your 9-digit UBI with no spaces or dashes.'); return; }
-		if (!image) { Alert.alert('Please add an image of your business license to continue.'); return; }
+		if (!licenseVerificationImage) { Alert.alert('Please add an image of your business license to continue.'); return; }
 		if (!street || street.split(' ').length < 3) { Alert.alert('Please enter your street number and name.'); return; }
 		if (!city) { Alert.alert('Please enter your city.'); return; }
 		if (zip.toString().length !== 5) { Alert.alert('Please enter your 5-digit zip code.'); return; }
 		if (!termsOfService) { Alert.alert('Please read and accept the terms of service to complete your registration.'); return; }
 
 		const statusCode = await register({
-			organizationName, email, password, license, street, city, state, zip, termsOfService,
+			organizationName, email, password, license, street, city, state, zip, termsOfService, licenseVerificationImage,
 		});
 		switch (statusCode) {
 			case (201 || 202): Alert.alert('Registration complete! Please log in to continue.'); navigate('LoginScreen', { email, password }); return;
@@ -96,8 +96,8 @@ export default () => {
 
 				<FormImageInput
 					text="Business License Verification"
-					image={image}
-					setImage={setImage}
+					image={licenseVerificationImage}
+					setImage={setLicenseVerificationImage}
 				/>
 
 				<FormTextInput
