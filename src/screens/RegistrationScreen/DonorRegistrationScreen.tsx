@@ -4,30 +4,27 @@ import {
 	Alert,
 	ScrollView,
 	Text,
-	TextInput,
 	View,
 } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
 import { Checkbox } from 'react-native-paper';
 import {
+	FormImageInput,
 	FormTextInput,
-	InputLabel,
 	Header,
 	LinkButton,
 	SpacerInline,
 	Title,
-	Icon,
 } from '@elements';
 import useGlobal from '@state';
 import * as colors from '@util/colors';
 import styles from './RegistrationScreen.styles';
 
+
 export default () => {
 	const { navigate } = useNavigation();
 	const [ _state, actions ] = useGlobal() as any;
 	const { register } = actions;
+
 
 	const [ city, setCity ] = useState('');
 	const [ email, setEmail ] = useState('');
@@ -64,20 +61,6 @@ export default () => {
 		}
 	};
 
-	// TODO: add take picture functionality, abstract this out to a util or state.  See https://docs.expo.io/versions/latest/sdk/imagepicker/#imagepickerlaunchcameraasyncoptions
-	const pickImage = async () => {
-		const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-		if (status !== 'granted') {
-			Alert.alert('No camera roll permissions');
-		}
-		const pickedImage = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.All,
-			allowsEditing: true,
-			aspect: [ 16, 9 ],
-			quality: 1,
-		});
-		pickedImage.cancelled === false && setImage(pickedImage);
-	};
 
 	return (
 		<ScrollView contentContainerStyle={styles.outerContainer}>
@@ -111,25 +94,11 @@ export default () => {
 					setValue={setLicense}
 				/>
 
-				<View>
-					<InputLabel text="Business License Verification" />
-					<View style={styles.row}>
-						<View style={{ flex: 4 }}>
-							<TextInput
-								value={image?.uri}
-								style={styles.input}
-								autoCapitalize="none"
-							/>
-						</View>
-						<View style={styles.iconContainer}>
-							<TouchableWithoutFeedback
-								onPress={pickImage}
-							>
-								<Icon name="image" style={styles.icon} />
-							</TouchableWithoutFeedback>
-						</View>
-					</View>
-				</View>
+				<FormImageInput
+					text="Business License Verification"
+					image={image}
+					setImage={setImage}
+				/>
 
 				<FormTextInput
 					text="Street Address"
@@ -149,7 +118,7 @@ export default () => {
 					<FormTextInput
 						text="State"
 						value={state}
-						setValue={() => {}}
+						setValue={() => { }}
 						width="15%"
 						autoCapitalize="words"
 					/>
