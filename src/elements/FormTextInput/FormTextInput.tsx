@@ -15,6 +15,7 @@ interface FormTextInputProps {
 	width?: number | string;
 	autoCapitalize?: 'words' | 'sentences' | 'none' | 'characters';
 	inline?: boolean;
+	type?: string;
 	upperCase?: boolean;
 	disabled?: boolean;
 	style?: StyleProp<TextStyle>;

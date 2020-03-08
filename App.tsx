@@ -8,7 +8,6 @@ import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import Route from './src/routes/Route';
 import styles from './App.styles';
 
-
 YellowBox.ignoreWarnings([
 	'Warning: componentWillReceiveProps has been renamed',
 	'Require cycle',
