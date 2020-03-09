@@ -35,8 +35,8 @@ export default () => {
 	const [ licenseVerificationImage, setLicenseVerificationImage ] = useState();
 	const [ licenseNumber, setLicenseNumber ] = useState(user.business_license);
 	const [ organizationName, setOrganizationName ] = useState(user.organization_name);
-	const [ password, setPassword ] = useState('•••••••');
-	const [ confirmPassword, setConfirmPassword ] = useState('•••••••');
+	const [ password, setPassword ] = useState();
+	const [ confirmPassword, setConfirmPassword ] = useState();
 	const [ street, setStreet ] = useState(user.address_street);
 	const [ city, setCity ] = useState(user.address_city);
 	const [ state, setState ] = useState(user.address_state); // TODO: update state to US_State or something
@@ -60,7 +60,7 @@ export default () => {
 		const statusCode = await updateDonorOrClient({
 			organizationName,
 			email,
-			street,
+			password,
 			city,
 			state,
 			zip,
@@ -69,7 +69,7 @@ export default () => {
 		});
 
 		switch (statusCode) {
-			case (201 || 202): Alert.alert('Profile updated!'); setEditing(false); return;
+			case (200 || 202): Alert.alert('Profile updated!'); setEditing(false); return;
 			case 406: Alert.alert('Error: not accepted'); return;
 			case 500: Alert.alert('Internal server error, please try again later.'); return;
 			default: Alert.alert("Sorry, that didn't work, please try again later."); console.log(statusCode);

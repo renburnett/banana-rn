@@ -60,12 +60,12 @@ export default () => {
 	const [ hidePwd, setHidePwd ] = useState(true);
 	const [ email, setEmail ] = useState(user.email);
 	const [ transportationMethod, setTransportationMethod ] = useState(user.transportation_method);
-	const [ password, setPassword ] = useState('•••••••');
-	const [ confirmPassword, setConfirmPassword ] = useState('•••••••');
+	const [ password, setPassword ] = useState();
+	const [ confirmPassword, setConfirmPassword ] = useState();
 	const [ street, setStreet ] = useState(user.address_street);
 	const [ city, setCity ] = useState(user.address_city);
 	const [ state, setState ] = useState(user.address_state); // TODO: update state to US_State or something
-	const [ zip, setZip ] = useState(user.address_zip.toString());
+	const [ zip, setZip ] = useState(user.address_zip.toString()); //TODO: remove toString() ??
 
 	const validateAndSubmit = async () => {
 		if (!email.includes('@') || !email.includes('.')) { Alert.alert('Please enter a valid email address.'); return; }
@@ -78,6 +78,7 @@ export default () => {
 
 		const statusCode = await updateDonorOrClient({
 			email,
+			password,
 			street,
 			city,
 			state,

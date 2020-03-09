@@ -18,6 +18,7 @@ import LoginSuccessScreen from '../screens/LoginSuccessScreen';
 import DonationScreen from '../screens/DashboardScreen/DonationScreen';
 import QRCodeScannerScreen from '../screens/QRCodeScannerScreen/QRCodeScannerScreen';
 import ClaimDetailScreen from '../screens/ClaimDetailScreen/ClaimDetailScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 import MenuDrawer from '../elements/MenuDrawer/MenuDrawer';
 import SvgImage from '../elements/SvgImage/SvgImage';
@@ -27,6 +28,7 @@ export const MainStack = createStackNavigator(
 	{
 		DashboardScreen,
 		LoginSuccessScreen,
+		ProfileScreen,
 		DonationScreen,
 		QRCodeScannerScreen,
 		ClaimDetailScreen,
@@ -69,7 +71,7 @@ const donorOrClientDrawer = () => {
 
 	const COMMON_MENU = {
 		ProfileScreen: {
-			screen: MainStack,
+			screen: ProfileScreen,
 			navigationOptions: {
 				drawerLabel: 'My Profile',
 				drawerIcon: <SvgImage source={require('@assets/icons/ICON_DONATION(WHITE).svg')} />,

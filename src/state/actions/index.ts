@@ -9,9 +9,11 @@ export interface Actions {
 	postDonation: () => Promise<StatusCode>;
 	register: () => Promise<StatusCode>;
 	scan: () => Promise<StatusCode>;
+	updateDonorOrClient: () => Promise<StatusCode>;
 }
 export { getActiveDonationsForClient } from './getActiveDonationsForClient';
 export { getDonationsOrClaims } from './getDonationsOrClaims';
+export { updateDonorOrClient } from './updateDonorOrClient';
 export { getLocation } from './getLocation';
 export { logIn, logOut } from './auth';
 export { postDonation } from './postDonation';
