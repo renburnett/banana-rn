@@ -48,13 +48,13 @@ export default () => {
 		// TODO: redundant with alerts in registration screen
 		if (organizationName === '') { Alert.alert("Please add your organization's name."); return; }
 		if (!email.includes('@') || !email.includes('.')) { Alert.alert('Please enter a valid email address.'); return; }
-		if (licenseNumber.length !== 9) { Alert.alert('Please enter your 9-digit UBI with no spaces or dashes.'); return; }
-		if (!licenseVerificationImage) { Alert.alert('Please add an image of your business license to continue.'); return; }
+		// if (licenseNumber.length !== 9) { Alert.alert('Please enter your 9-digit UBI with no spaces or dashes.'); return; }
+		// if (!licenseVerificationImage) { Alert.alert('Please add an image of your business license to continue.'); return; }
 		if (!street || street.split(' ').length < 3) { Alert.alert('Please enter your street number and name.'); return; }
 		if (!city) { Alert.alert('Please enter your city.'); return; }
 		if (zip.toString().length !== 5) { Alert.alert('Please enter your 5-digit zip code.'); return; }
-		if (password !== confirmPassword) { Alert.alert('Passwords do not match.'); return; }
-		if (password.length < 8) { Alert.alert('Please enter a password at least 8 characters long.'); return; }
+		// if (password !== confirmPassword) { Alert.alert('Passwords do not match.'); return; }
+		// if (password.length < 8) { Alert.alert('Please enter a password at least 8 characters long.'); return; }
 
 		// TODO: Only provide the inputs that have changed
 		const statusCode = await updateDonorOrClient({
