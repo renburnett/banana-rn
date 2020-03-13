@@ -1,35 +1,43 @@
 import railsAxios from '@util/railsAxios';
 
 interface DonorUpdateProps {
-	organizationName: string;
-	email: string;
-	password: string;
-	license: string;
-	street: string;
-	city: string;
-	state: string;
-	zip: string;
+	organizationName?: string;
+	email?: string;
+	password?: string;
+	license?: string;
+	street?: string;
+	city?: string;
+	state?: string;
+	zip?: string;
 	licenseVerificationImage?: any; // TODO: update type
-	pickupLocation: string;
+	pickupLocation?: string;
 }
 
 interface ClientUpdateProps {
-	email: string;
-	password: string;
-	street: string;
-	city: string;
-	state: string;
-	zip: string;
-	transportationMethod: string;
+	email?: string;
+	password?: string;
+	street?: string;
+	city?: string;
+	state?: string;
+	zip?: string;
+	transportationMethod?: string;
 	incomeVerificationImage?: any;
 }
 
 // TODO: Consolidate two functions into one; add donor/client flag ??
 export const updateDonor = async (store, donor: DonorUpdateProps) => {
 	const { userIdentity, user, jwt } = store.state;
+	const updatedDonor = { ...donor };
+
+	Object.entries(donor).forEach(([ key, value ]) => {
+		if (value === user[key]) {
+			updatedDonor[key] = undefined;
+		}
+	});
+
 	const {
 		organizationName, email, password, license, street, city, state, zip, licenseVerificationImage, pickupLocation,
-	} = donor;
+	} = updatedDonor;
 
 	const route = userIdentity === 'donor' ? 'donors' : 'clients';
 	const endpoint = `/${route}/${user.id}/update`;
@@ -59,9 +67,18 @@ export const updateDonor = async (store, donor: DonorUpdateProps) => {
 
 export const updateClient = async (store, client: ClientUpdateProps) => {
 	const { userIdentity, user, jwt } = store.state;
+	const updatedClient = { ...client };
+
+	Object.entries(client).forEach(([ key, value ]) => {
+		if (value === user[key]) {
+			updatedClient[key] = undefined;
+		}
+	});
+
 	const {
 		email, password, street, city, state, zip, transportationMethod, incomeVerificationImage,
-	} = client;
+	} = updatedClient;
+
 	const route = userIdentity === 'donor' ? 'donors' : 'clients';
 	const endpoint = `/${route}/${user.id}/update`;
 
